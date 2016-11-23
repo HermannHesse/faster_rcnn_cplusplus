@@ -7,7 +7,7 @@
 #include <fstream>
 #include <boost/python.hpp>
 #include "caffe/caffe.hpp"
-#include "lib/nms/gpu_nms.hpp"
+#include "py-faster-rcnn/lib/nms/gpu_nms.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>

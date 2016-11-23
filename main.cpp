@@ -1,17 +1,16 @@
 #include "faster_rcnn.hpp"
 
+int main() {
 
-int main()
-{
-    string model_file = "data/pascal_voc/faster_rcnn_test.prototxt";
-    string weights_file = "data/pascal_voc/ZF_faster_rcnn_final.caffemodel";
+    string model_file = "py-faster-rcnn/models/pascal_voc/ZF/faster_rcnn_alt_opt/faster_rcnn_test.pt";
+    string weights_file = "py-faster-rcnn/data/faster_rcnn_models/ZF_faster_rcnn_final.caffemodel";
     string labels_file = "data/pascal_voc/synset_words.txt";
     int GPUID = 0;
 
     Faster_RCNN detector(model_file, weights_file, labels_file, GPUID);
 
     vector<Detection> detections;
-    cv::Mat image = cv::imread("data/pascal_voc/2007_000847.jpg");
+    cv::Mat image = cv::imread("py-faster-rcnn/data/demo/001763.jpg");
     detector.detect(image, detections);
 
     std::cout<<"x\ty\twidth\theight\tcategory\tscore"<<std::endl;
