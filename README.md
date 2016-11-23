@@ -146,7 +146,7 @@ make
 collect2: error: ld returned 1 exit status
 ```
 There is a problem with the `CMakeCache.txt` and the enviroment variable `CUDA_USE_STATIC_CUDA_RUNTIME`.
-To solve this set it `OFF` in `CMakeList.txt`: 
+To solve this issue, set it `OFF` in `CMakeList.txt`: 
 ```Shell
 # Add the following line to CMakeList.txt and recompile
 set(CUDA_USE_STATIC_CUDA_RUNTIME "OFF")
