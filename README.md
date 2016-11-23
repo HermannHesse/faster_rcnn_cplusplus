@@ -2,39 +2,42 @@
 
 The above code is an interface inference in c++ against a [Faster R-CNN](https://github.com/rbgirshick/py-faster-rcnn) trained network.
 
-From the code developed by Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun (Microsoft Research) for the project [py-faster-rcnn](https://github.com/rbgirshick/py-faster-rcnn), some modules and files from the `lib` folder are used directly:
- - **RPN module** (`lib/rpn/`): Needed to deploy the *region proposal network*.
- - **NMS module** (`lib/nms/`): Needed to apply *non-maximum suppression* step.
- - **Fast_rcnn module** (`lib/fast_rcnn/`): Contains auxiliary functions.
- - **`lib/Makefile` and `lib/setup.py`**: To compile NMS CUDA and Cython libraries.
- - **`data/fetch_faster_rcnn_caffemodels.sh`**: To download pre-computed Faster R-CNN detectors.
- 
-The project also uses their branch of the framework Caffe ([caffe-fast-rcnn](https://github.com/rbgirshick/caffe-fast-rcnn/tree/0dcd397b29507b8314e252e850518c5695efbb83)), added as a submodule to the present project for convenience.
+From the code developed by Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun (Microsoft Research) for the project [py-faster-rcnn](https://github.com/rbgirshick/py-faster-rcnn), some modules and files from the `py-faster-rcnn/lib` and `py-faster-rcnn/data/scripts/` folders are used directly:
+ - **RPN module** (`py-faster-rcnn/lib/rpn/`): Needed to deploy the *region proposal network*.
+ - **NMS module** (`py-faster-rcnn/lib/nms/`): Needed to apply *non-maximum suppression* step.
+ - **Fast_rcnn module** (`py-faster-rcnn/lib/fast_rcnn/`): Contains auxiliary functions.
+ - **`lib/Makefile` and `py-faster-rcnn/lib/setup.py`**: To compile NMS CUDA and Cython libraries.
+ - **`py-faster-rcnn/data/scripts/fetch_faster_rcnn_models.sh`**: To download pre-computed Faster R-CNN detectors.
 
-C++ class `faster_rcnn` is a modification/correction of the project [FasterRCNN-Encapsulation-Cplusplus](https://github.com/YihangLou/FasterRCNN-Encapsulation-Cplusplus) fixing some bugs and extending to more than two categories its functionality.
+This code is added as a submodule to the present project for convenience. It also uses their branch of the framework Caffe ([caffe-fast-rcnn](https://github.com/rbgirshick/caffe-fast-rcnn/tree/0dcd397b29507b8314e252e850518c5695efbb83)).
+
+`FASTER_RCNN` C++ class implemented is a modification/correction of the project [FasterRCNN-Encapsulation-Cplusplus](https://github.com/YihangLou/FasterRCNN-Encapsulation-Cplusplus) fixing some bugs and extending its functionality to more than two categories.
 
 ### Steps to use the code
+
+First of all, clone this project with **`--recursive`** flag:
+```Shell
+git clone --recursive https://github.com/HermannHesse/faster_rcnn_cplusplus.git
+```
 
 #### Requeriments inherited from py-faster-rcnn
 
 1. Requirements for `Caffe` and `pycaffe` (see: [Caffe installation instructions](http://caffe.berkeleyvision.org/installation.html))
 
     **Note:** Caffe *must* be built with support for Python layers!
-    
     ```make
     # In your Makefile.config, make sure to have this line uncommented
     WITH_PYTHON_LAYER := 1
     # Unrelatedly, it's also recommended that you use CUDNN
     USE_CUDNN := 1
       ```
-    
     You can download Ross Girshick [Makefile.config](http://www.cs.berkeley.edu/~rbg/fast-rcnn-data/Makefile.config) for reference.
   
 2. Python packages you might not have: `cython`, `python-opencv`, `easydict`
 
 3. Build Caffe and pycaffe
     ```Shell
-    cd $FRCN_ROOT/caffe-fast-rcnn
+    cd $ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/
     # Now follow the Caffe installation instructions here:
     #   http://caffe.berkeleyvision.org/installation.html
 
@@ -45,50 +48,86 @@ C++ class `faster_rcnn` is a modification/correction of the project [FasterRCNN-
     
 4. Build the Cython modules
     ```Shell
-    cd $FRCN_ROOT/lib
+    cd $ROOT_DIR/py-faster-rcnn/lib/
     make
     ```
 
 5. Download pre-computed Faster R-CNN detectors
     ```Shell
-    cd $FRCN_ROOT
+    cd $ROOT_DIR/py-faster-rcnn/
     ./data/scripts/fetch_faster_rcnn_models.sh
     ```
     
 #### Own requeriments
 
+1. Compile the project with CMake
+    ```Shell
+    mkdir $ROOT_DIR/build/
+    cd $ROOT_DIR/build/
+    cmake ..
+    make
+    ```
 
+2. Run the demo
+    ```Shell
+    ./a.out
+    ```
+    
 ### Popular issues
-Issue 1
 
+#### Issue 1
+
+```Shell
 "Unknown layer type: Python"
-
-Añadir PYTHON_LAYER al compilar caffe
+```
+Caffe has been probably compiled without PYTHON_LAYER support. Uncomment the following line 
+```make
+WITH_PYTHON_LAYER := 1
+```
+in `$ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/Makefile.config` file and recompile it.
+```Shell
+cd $ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/
+make clean
 make -j8 && make pycaffe
-uncomment WITH__PYTHON_LAYER: =1 in Makefile.config and recompile it.
+```
 
-Issue 2
+#### Issue 2
 
-Error message like this:
-
+```Shell
 fatal error: caffe/proto/caffe.pb.h: No such file or directory
-caffe.pb.h is a header file generated by Google Protocol Buffer. Here is a tutorial about it. We must first generate it use commands below:
+#include "caffe/proto/caffe.pb.h"
+                                  ^
+compilation terminated.
+```
+`caffe.pb.h` is a header file generated by Google Protocol Buffer and it is missing for some reason. Let's create it.
+```Shell
+cd $ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/
+protoc src/caffe/proto/caffe.proto --cpp_out=.
+mkdir include/caffe/proto
+mv src/caffe/proto/caffe.pb.h include/caffe/proto
+```
+Reference full discussion from [here](https://github.com/NVIDIA/DIGITS/issues/105).
 
-$ protoc src/caffe/proto/caffe.proto --cpp_out=.
-$ mkdir include/caffe/proto
-$ mv src/caffe/proto/caffe.pb.h include/caffe/proto
-Then compile again and we have the question solved.
-Reference from here (https://github.com/NVIDIA/DIGITS/issues/105)
+#### Issue 3
 
-Issue 3
-
+When the net is loading Caffe can't find rpn python layer:
+```Shell
 ImportError: No module named rpn.proposal_layer
+```
+Add `lib/` directory to `PYTHONPATH`:
+```Shell
+export PYTHONPATH=$ROOT_DIR/py-faster-rcnn/lib/:${PYTHONPATH} 
+```
 
-Add lib to pythonpath
+#### Issue 4
 
-Issue 4
-
+Python can't find gpu_nms library:
+```Shell
 from nms.gpu_nms import gpu_nms
 ImportError: No module named gpu_nms
-
-Hay que compilar las librerias gpu_nms.so y cpu_nms.so (mirar el Makefile del lib de py-faster-rcnn)
+```
+Must compile libraries `gpu_nms.so` and `cpu_nms.so`done by running the fourth step:
+```Shell
+cd $ROOT_DIR/py-faster-rcnn/lib/
+make
+```
