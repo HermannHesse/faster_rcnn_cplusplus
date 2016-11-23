@@ -1,7 +1,3 @@
-### **********************************************
-### ...under construction...
-### **********************************************
-
 # Faster R-CNN C++ Inference
 
 The above code is an interface inference in c++ against a [Faster R-CNN](https://github.com/rbgirshick/py-faster-rcnn) trained network.
@@ -64,17 +60,24 @@ git clone --recursive https://github.com/HermannHesse/faster_rcnn_cplusplus.git
     
 #### Own requeriments
 
-1. Compile the project with CMake
+1. Set `$ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/python/` and `$ROOT_DIR/py-faster-rcnn/lib/` into the enviroment variable PYTHONPATH
+    ```Shell
+    export PYTHONPATH=$ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/python/:$ROOT_DIR/py-faster-rcnn/lib/:${PYTHONPATH}
+    ```
+
+2. Compile the project with CMake
     ```Shell
     mkdir $ROOT_DIR/build/
     cd $ROOT_DIR/build/
     cmake ..
     make
+    mv faster_rcnn_cplusplus ..
     ```
 
-2. Run the demo
+3. Run the demo
     ```Shell
-    ./a.out
+    cd $ROOT_DIR
+    ./faster_rcnn_cplusplus
     ```
     
 ### Popular issues
@@ -134,4 +137,22 @@ Must compile libraries `gpu_nms.so` and `cpu_nms.so`done by running the fourth s
 ```Shell
 cd $ROOT_DIR/py-faster-rcnn/lib/
 make
+```
+
+#### Issue 5
+
+```Shell
+/usr/bin/ld: cannot find -lopencv_dep_cudart 
+collect2: error: ld returned 1 exit status
+```
+There is a problem with the `CMakeCache.txt` and the enviroment variable `CUDA_USE_STATIC_CUDA_RUNTIME`.
+To solve this set it `OFF` in `CMakeList.txt`: 
+```Shell
+# Add the following line to CMakeList.txt and recompile
+set(CUDA_USE_STATIC_CUDA_RUNTIME "OFF")
+```
+or generate CMake files with:
+```Shell
+cd $ROOT_DIR/build/
+cmake .. -D CUDA_USE_STATIC_CUDA_RUNTIME=OFF
 ```
