@@ -60,7 +60,7 @@ git clone --recursive https://github.com/HermannHesse/faster_rcnn_cplusplus.git
     
 #### Own requeriments
 
-1. Set `$ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/python/` and `$ROOT_DIR/py-faster-rcnn/lib/` into the enviroment variable PYTHONPATH
+1. Set `$ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/python/` and `$ROOT_DIR/py-faster-rcnn/lib/` into the enviroment variable `PYTHONPATH`
     ```Shell
     export PYTHONPATH=$ROOT_DIR/py-faster-rcnn/caffe-fast-rcnn/python/:$ROOT_DIR/py-faster-rcnn/lib/:${PYTHONPATH}
     ```
@@ -156,3 +156,4 @@ or generate CMake files with:
 cd $ROOT_DIR/build/
 cmake .. -D CUDA_USE_STATIC_CUDA_RUNTIME=OFF
 ```
+Reference full discussion from [here](https://github.com/opencv/opencv/issues/6542).
