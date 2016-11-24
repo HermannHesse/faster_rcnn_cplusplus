@@ -11,7 +11,7 @@ From the code developed by Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun (Mi
 
 This code is added as a submodule to the present project for convenience. It also uses their branch of the framework Caffe ([caffe-fast-rcnn](https://github.com/rbgirshick/caffe-fast-rcnn/tree/0dcd397b29507b8314e252e850518c5695efbb83)).
 
-`FASTER_RCNN` C++ class implemented is a modification/correction of the project [FasterRCNN-Encapsulation-Cplusplus](https://github.com/YihangLou/FasterRCNN-Encapsulation-Cplusplus) fixing some bugs and extending its functionality to more than two categories.
+`FASTER_RCNN` C++ class has addpated (modification/correction) some fuctions of the project [FasterRCNN-Encapsulation-Cplusplus](https://github.com/YihangLou/FasterRCNN-Encapsulation-Cplusplus). Thanks so much to his SourceCode.
 
 ### Steps to use the code
 
