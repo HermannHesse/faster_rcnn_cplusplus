@@ -6,7 +6,7 @@ From the code developed by Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun (Mi
  - **RPN module** (`py-faster-rcnn/lib/rpn/`): Needed to deploy the *region proposal network*.
  - **NMS module** (`py-faster-rcnn/lib/nms/`): Needed to apply *non-maximum suppression* step.
  - **Fast_rcnn module** (`py-faster-rcnn/lib/fast_rcnn/`): Contains auxiliary functions.
- - **`lib/Makefile` and `py-faster-rcnn/lib/setup.py`**: To compile NMS CUDA and Cython libraries.
+ - **`py-faster-rcnn/lib/Makefile` and `py-faster-rcnn/lib/setup.py`**: To compile NMS CUDA and Cython libraries.
  - **`py-faster-rcnn/data/scripts/fetch_faster_rcnn_models.sh`**: To download pre-computed Faster R-CNN detectors.
 
 This code is added as a submodule to the present project for convenience. It also uses their branch of the framework Caffe ([caffe-fast-rcnn](https://github.com/rbgirshick/caffe-fast-rcnn/tree/0dcd397b29507b8314e252e850518c5695efbb83)).
