@@ -52,6 +52,9 @@ void Faster_RCNN::detect(cv::Mat cv_image, vector<Detection>& detections) {
         std::cout<<"Can not reach the image"<<std::endl;
         return;
     }
+    
+    int height = cv_image.rows;
+    int width = cv_image.cols;
 
     /* It is necessary to pass as pointers in order to keep them in the net */
     float *im_info = new float[3];
@@ -86,7 +89,7 @@ void Faster_RCNN::detect(cv::Mat cv_image, vector<Detection>& detections) {
         for (int c = 0; c < 4; c++)
             boxes[n*4+c] = rois[n*5+c+1] / img_scale; //rois[n*5] == 0 SIEMPRE
 
-    bbox_transform_inv(num_rois, bbox_delt, pred_cls, boxes, pred, height_resized, width_resized);
+    bbox_transform_inv(num_rois, bbox_delt, pred_cls, boxes, pred, height, width);
 
     /* Background class is ignored hereafter */
     for (int i = 1; i < num_clases_; i++) {
