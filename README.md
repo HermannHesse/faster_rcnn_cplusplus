@@ -1,6 +1,6 @@
 # Faster R-CNN C++ Inference
 
-The above code is an interface inference in c++ against a [Faster R-CNN](https://github.com/rbgirshick/py-faster-rcnn) trained network.
+The above code is an inference in c++ against a [Faster R-CNN](https://github.com/rbgirshick/py-faster-rcnn) trained network.
 
 From the code developed by Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun (Microsoft Research) for the project [py-faster-rcnn](https://github.com/rbgirshick/py-faster-rcnn), some modules and files from the `py-faster-rcnn/lib` and `py-faster-rcnn/data/scripts/` folders are used directly:
  - **RPN module** (`py-faster-rcnn/lib/rpn/`): Needed to deploy the *region proposal network*.
